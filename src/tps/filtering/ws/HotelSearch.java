@@ -8,4 +8,7 @@ package tps.filtering.ws;
  */
 public class HotelSearch {
 
+    // methode chercher hotels avec table disponiblite
+    // param-in : date, nbNight, nbRoom
+    //
 }
