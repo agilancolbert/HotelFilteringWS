@@ -16,7 +16,7 @@ public class JdbcConnectionDemo {
         final String password = "root";
         Connection con = null;
 
-        ResultSet résultats = null;
+        ResultSet resultats = null;
         final String requete = "SELECT * FROM hotel";
 
         try {
@@ -25,15 +25,15 @@ public class JdbcConnectionDemo {
             System.out.println("Connection is successful!!!!!!");
 
             final Statement stmt = con.createStatement();
-            résultats = stmt.executeQuery(requete);
-            final ResultSetMetaData rsmd = résultats.getMetaData();
+            resultats = stmt.executeQuery(requete);
+            final ResultSetMetaData rsmd = resultats.getMetaData();
             final int nbCols = rsmd.getColumnCount();
-            while (résultats.next()) {
+            while (resultats.next()) {
                 for (int i = 1; i <= nbCols; i++)
-                    System.out.print(résultats.getString(i) + " ");
+                    System.out.print(resultats.getString(i) + " ");
                 System.out.println();
             }
-            résultats.close();
+            resultats.close();
 
         } catch (final Exception e) {
             e.printStackTrace();
