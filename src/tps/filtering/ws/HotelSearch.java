@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author agilan.colbert
@@ -26,15 +28,19 @@ public class HotelSearch {
         Connection con = null;
 
         ResultSet resultats = null;
-        String requete = "SELECT * FROM disponibilite "
-        		+ "WHERE date=?"
-        		+ "AND nbNight > ? "
-        		+ "AND nbRoom > ? ";
+        String requete = "SELECT * "
+        		+ "FROM hotel h INNER JOIN disponibilite d "
+        		+ "ON h.idHotel = d.idHotel "
+        		+ "WHERE d.date = ? "
+        		+ "AND d.nbNight >= ? "
+        		+ "AND d.nbRoom >= ? ";
         		//
         
-        String searchHotelResult = null;
+        String searchHotelResult = "";
+        List<Hotel> hotelsDispo = new ArrayList<>();
 
         try {
+        	Class.forName("com.mysql.jdbc.Driver"); 
             System.out.println("Connecting to database..............." + JdbcURL);
             con = DriverManager.getConnection(JdbcURL, Username, password);
             System.out.println("Connection is successful!!!!!!");
@@ -44,12 +50,18 @@ public class HotelSearch {
             stmt.setInt(2, nbNight);
             stmt.setInt(3, nbRoom);
             
+            System.out.println("********************" + stmt.toString());
+            
+            
             resultats = stmt.executeQuery();
             final ResultSetMetaData rsmd = resultats.getMetaData();
             final int nbCols = rsmd.getColumnCount();
             while (resultats.next()) {
-                for (int i = 1; i <= nbCols; i++)
+                for (int i = 1; i <= nbCols; i++){
                     System.out.print(resultats.getString(i) + " ");
+                    searchHotelResult+=resultats.getString(i);
+                    searchHotelResult+=" ";
+                }
                 System.out.println();
             }
             resultats.close();
@@ -57,8 +69,8 @@ public class HotelSearch {
         } catch (final Exception e) {
             e.printStackTrace();
         }
-        
-        return null;
+        //System.out.println(searchHotelResult);
+        return searchHotelResult;
         
 	}
 	
@@ -104,7 +116,11 @@ public class HotelSearch {
 		return true;
 	}
 	public static void main(final String[] args) throws Exception {
-		HotelSearch.searchHotel("12/02/2015", 2, 2);
+		HotelSearch.searchHotel("12/02/2015", 1, 1);
     }
+	
+	public String test(){
+		return HotelSearch.searchHotel("12/02/2015", 1, 1);
+	}
 
 }
