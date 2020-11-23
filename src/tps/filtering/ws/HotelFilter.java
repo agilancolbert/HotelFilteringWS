@@ -105,12 +105,12 @@ public class HotelFilter {
 		
 	}
 	
-	public ArrayList<ExposedHotel> filterHotel(String date, int nbNight, int nbRoom) throws ParseException{
+	public String[] filterHotel(String date, int nbNight, int nbRoom) throws ParseException{
 
 		
 		getAllHotel();
 		int cptAvalaibleRooms;
-		ArrayList<Hotel> availableHotels = new ArrayList<Hotel>();
+		//ArrayList<Hotel> availableHotels = new ArrayList<Hotel>();
 		
 		Date arrivalDateClient = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		Calendar calendar = Calendar.getInstance(); 
@@ -120,50 +120,55 @@ public class HotelFilter {
 		Date departureDateClient = calendar.getTime();
 		
 		filterRequestData = new FilterRequestData(date,new SimpleDateFormat("yyyy-MM-dd").format(departureDateClient),nbNight,nbRoom);
-		
+		ArrayList<Chambre> listTmpChambresDisponibles = new ArrayList<Chambre>();
         for(Hotel h : hotels){
         	cptAvalaibleRooms = 0;
         	ArrayList<Chambre> chambres = h.getChambres();
         	for(Chambre c : chambres){
+        		boolean chambreDispo = true;
         		ArrayList<Reservation> reservations = c.getReservations();
         		for(Reservation r : reservations){
         			Date dateReservationDebut;
         			Date dateReservationFin;
-					try {
-						dateReservationDebut = new SimpleDateFormat("yyyy-MM-dd").parse(r.getArrivalDate());
-						dateReservationFin = new SimpleDateFormat("yyyy-MM-dd").parse(r.getDepartureDate());
-						
-	        			if(arrivalDateClient.compareTo(dateReservationDebut)<0 
-	        					&& departureDateClient.compareTo(dateReservationDebut)<=0){
-	        				cptAvalaibleRooms++;
-	        				lastFilterAvailableRooms.add(c);
-	        			}
-	        			else if(arrivalDateClient.compareTo(dateReservationFin)>=0){
-	        				cptAvalaibleRooms++;
-	        				lastFilterAvailableRooms.add(c);
-	        			}
-	        			
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}        			
+					dateReservationDebut = new SimpleDateFormat("yyyy-MM-dd").parse(r.getArrivalDate());
+					dateReservationFin = new SimpleDateFormat("yyyy-MM-dd").parse(r.getDepartureDate());
+					
+	        		if(arrivalDateClient.compareTo(dateReservationDebut)>=0 
+	        				&& (arrivalDateClient.compareTo(dateReservationFin)<0)){
+	        			chambreDispo = false;
+	        			break;
+	        		}
+	        		else if(departureDateClient.compareTo(dateReservationDebut)>=0 
+	        				&& (departureDateClient.compareTo(dateReservationFin)<0)){
+	        			chambreDispo = false;
+	        			break;
+	        		}
+        		}
+        		if(chambreDispo){
+        			cptAvalaibleRooms++;
+        			listTmpChambresDisponibles.add(c);
         		}
         	}
-        	if(cptAvalaibleRooms >= nbNight)
-        		availableHotels.add(h);
+        	if(cptAvalaibleRooms >= nbRoom){
+        		lastFilterAvailableHotel.add(h);
+        		lastFilterAvailableRooms.addAll(listTmpChambresDisponibles);
+        		listTmpChambresDisponibles.clear();
+        	}
         }
-        lastFilterAvailableHotel.clear();
-        lastFilterAvailableHotel.addAll(availableHotels);
+        /////////////////////////////////////////////////////////////////////
+        //lastFilterAvailableHotel.clear();
+        /////////////////////////////////////////////////////////////////////
+        //lastFilterAvailableHotel.addAll(availableHotels);
         /*
         for (Hotel h: availableHotels){
         	System.out.println("hotel dispo : " + h.getNom());
         }
         */
         ArrayList<ExposedHotel> listeExposedHotel = new ArrayList<ExposedHotel>();
-        for(Hotel h : availableHotels){
+        for(Hotel h : lastFilterAvailableHotel){
         	listeExposedHotel.add(new ExposedHotel(h.getIdHotel(), h.getNom(), h.getAddresse()));
         }
-        return listeExposedHotel;
+        return listeExposedHotel.toArray(new String[listeExposedHotel.size()]);
         
 	}
 	
