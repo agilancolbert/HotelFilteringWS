@@ -3,6 +3,8 @@
  */
 package tps.filtering.ws;
 
+import java.util.ArrayList;
+
 /**
  * @author agilan.colbert
  */
@@ -10,27 +12,29 @@ public class Hotel {
     private int idHotel;
     private String nom;
     private String addresse;
+    private ArrayList<Chambre> chambres;
 
     /**
      * 
      */
     public Hotel() {
         super();
+        chambres = new ArrayList<Chambre>();
     }
 
-    /**
-     * @param idHotel
-     * @param nom
-     * @param addresse
-     */
-    public Hotel(final int idHotel, final String nom, final String addresse) {
-        super();
-        this.idHotel = idHotel;
-        this.nom = nom;
-        this.addresse = addresse;
-    }
 
-    /**
+
+	public Hotel(int idHotel, String nom, String addresse, ArrayList<Chambre> chambres) {
+		super();
+		this.idHotel = idHotel;
+		this.nom = nom;
+		this.addresse = addresse;
+		this.chambres = chambres;
+	}
+
+
+
+	/**
      * Getter for idHotel.
      * 
      * @return the idHotel
@@ -83,5 +87,13 @@ public class Hotel {
     public void setAddresse(final String addresse) {
         this.addresse = addresse;
     }
+    
+    public ArrayList<Chambre> getChambres() {
+		return chambres;
+	}
+
+	public void setChambres(ArrayList<Chambre> chambres) {
+		this.chambres = chambres;
+	}
 
 }

@@ -1,6 +1,6 @@
-<service name="HotelSearch" >
+<service name="HotelFilter" >
 	<Description>
-		Hotel Filtering WS 
+		Hotel Filter Service
 	</Description>
 	<messageReceivers>
 		<messageReceiver mep="http://www.w3.org/ns/wsdl/in-only" class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver" />

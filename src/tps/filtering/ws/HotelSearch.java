@@ -16,6 +16,7 @@ import java.util.List;
  * @author agilan.colbert
  */
 public class HotelSearch {
+	/*
 	private static final String JdbcURL = "jdbc:mysql://localhost:3306/hotel_booking?useSSL=false";
     private static final String Username = "root";
     private static final String password = "root";
@@ -115,12 +116,28 @@ public class HotelSearch {
         }
 		return true;
 	}
+	/*
 	public static void main(final String[] args) throws Exception {
-		HotelSearch.searchHotel("12/02/2015", 1, 1);
+		HotelFilter h = new HotelFilter();
+		//h.getAllHotel();
+		//HotelSearch.searchHotel("12/02/2015", 1, 1);
+		System.out.println("******************************************************************");
+		System.out.println("FILTER POUR LE 19/11/2020 - 2 HOTELS");
+		h.filterHotel("2020-11-24", 1, 1);
+		h.reserveHotel(1);
+		//System.out.println("******************************************************************");
+		
+		//System.out.println("FILTER POUR LE 10/11/2020 - 1 HOTEL");
+		//h.filterHotel("2020-11-10", 1, 1);
+		//h.reserveHotel(1);
+		
+		//System.out.println("******************************************************************");
+		//System.out.println("FILTER POUR LE 11/11/2020 - 0 HOTELS");
+		//h.filterHotel("2020-11-11", 1, 1);
+		//h.reserveHotel(1);
+		
+		
     }
+    */
 	
-	public String test(){
-		return HotelSearch.searchHotel("12/02/2015", 1, 1);
-	}
-
 }
